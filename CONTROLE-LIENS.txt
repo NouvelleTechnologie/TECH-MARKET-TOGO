@@ -1,0 +1,12 @@
+RAPPORT DE VÉRIFICATION — TECH MARKET TOGO
+
+[OK] Aucun sous-dossier dans l'archive livrée : tous les fichiers sont à la racine.
+[OK] Les imports relatifs des modules JavaScript pointent vers des fichiers présents.
+[OK] Les références locales de index.html (styles, icône, manifeste, entrée JS) pointent vers des fichiers présents.
+[OK] La navigation de page est gérée par HashRouter, adaptée aux hébergements statiques.
+[OK] Les routes applicatives ont été documentées dans LISEZ-MOI.txt.
+[OK] Grille produits modifiée pour utiliser auto-fit/minmax et s'adapter automatiquement à la largeur d'écran.
+
+Routes déclarées dans app.js : /, /proximite, /connexion, /espace-pro, /admin, /commander/:id et route de repli *.
+
+Note : ce contrôle vérifie les références statiques et les chemins déclarés. Le fonctionnement réel des connexions et opérations Firebase doit être testé après insertion de la configuration Firebase propre à TECH MARKET TOGO.

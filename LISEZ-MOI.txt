@@ -1,0 +1,33 @@
+TECH MARKET TOGO — FICHIERS PLATS, RÉFÉRENCES VÉRIFIÉES
+
+STRUCTURE
+Tous les fichiers du projet sont directement à la racine du ZIP. Aucun sous-dossier n'est nécessaire. Décompressez les fichiers dans un seul dossier, sans les déplacer individuellement.
+
+RÉFÉRENCES DE FICHIERS CONTRÔLÉES
+- index.html charge ./styles.css, ./icon.svg, ./manifest.json et ./main.js.
+- main.js importe ./app.js et ./authcontext.js.
+- app.js importe ./firebase.js, ./config.js, ./authcontext.js et ./utils.js.
+- authcontext.js importe ./firebase.js.
+- firebase.js importe ./config.js.
+- Les bibliothèques React, React Router et Firebase sont chargées via l'importmap de index.html.
+- Les chemins locaux ci-dessus correspondent à des fichiers présents à la racine.
+
+NAVIGATION ENTRE LES PAGES
+L'application utilise HashRouter pour que les pages fonctionnent sur un hébergement statique comme GitHub Pages. Les routes définies dans app.js sont :
+- #/ : accueil et découverte des produits
+- #/proximite : professionnels et services à proximité
+- #/connexion : connexion / création de compte
+- #/espace-pro : espace professionnel protégé
+- #/admin : administration protégée
+- #/commander/:id : commande d'un produit précis
+- toute route inconnue : redirection/écran de repli prévu par l'application
+Les liens de navigation doivent passer par React Router (Link / Navigate), et non par des chemins de fichiers HTML séparés.
+
+AFFICHAGE RESPONSIVE
+Les cartes produits utilisent désormais une grille auto-fit/minmax : le nombre de colonnes s'adapte à la largeur disponible. Les tailles de texte, espacements, formulaires et tableaux de bord restent fluides sur téléphone, tablette et ordinateur.
+
+CONFIGURATION FIREBASE
+Le projet TECH MARKET TOGO est indépendant de DigiCom. Ouvrez config.js et remplacez les valeurs fictives par les paramètres de l'application Web Firebase TECH MARKET TOGO. N'utilisez aucune clé privée ni aucun compte de service dans le navigateur. Déployez firestore.rules et firestore.indexes.json dans le projet Firebase dédié.
+
+À SAVOIR
+Ce projet utilise React sans compilation locale grâce à l'importmap de index.html et aux modules JavaScript déjà préparés. Une connexion Internet est nécessaire pour charger React et Firebase depuis leurs CDN. Les fonctions liées à Firebase nécessitent une configuration correcte, l'authentification et les règles Firestore déployées.

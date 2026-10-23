@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function own(uid) { return signedIn() && request.auth.uid == uid; }
+    function admin() {
+      return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    function professionalApproved(uid) {
+      return exists(/databases/$(database)/documents/users/$(uid))
+        && get(/databases/$(database)/documents/users/$(uid)).data.validation == 'approuve'
+        && get(/databases/$(database)/documents/users/$(uid)).data.abonnementStatut == 'actif'
+        && get(/databases/$(database)/documents/users/$(uid)).data.role in ['vendeur', 'reparateur'];
+    }
+    match /users/{uid} {
+      allow create: if own(uid)
+        && request.resource.data.role in ['acheteur', 'vendeur', 'reparateur']
+        && request.resource.data.validation == 'en_attente'
+        && request.resource.data.abonnementStatut == 'inactif';
+      allow read: if admin() || own(uid) || resource.data.publicProfile == true;
+      allow update: if admin() || (own(uid)
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.validation == resource.data.validation
+        && request.resource.data.abonnementStatut == resource.data.abonnementStatut
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nom','tel','ville','quartier','specialites','publicProfile']));
+      allow delete: if admin();
+    }
+    match /products/{productId} {
+      allow read: if admin() || (signedIn() && resource.data.ownerId == request.auth.uid) || resource.data.status == 'publie';
+      allow create: if signedIn() && request.resource.data.ownerId == request.auth.uid
+        && professionalApproved(request.auth.uid) && request.resource.data.status == 'en_attente'
+        && request.resource.data.prix is number && request.resource.data.prix > 0;
+      allow update: if admin() || (signedIn() && resource.data.ownerId == request.auth.uid
+        && professionalApproved(request.auth.uid)
+        && request.resource.data.ownerId == resource.data.ownerId
+        && request.resource.data.status == 'en_attente');
+      allow delete: if admin() || (signedIn() && resource.data.ownerId == request.auth.uid && resource.data.status != 'publie');
+    }
+    match /subscriptionRequests/{requestId} {
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == 'a_verifier'
+        && request.resource.data.plan in [1,6,12];
+      allow read: if admin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow update, delete: if admin();
+    }
+    match /orders/{orderId} {
+      allow create: if signedIn() && request.resource.data.buyerId == request.auth.uid
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'acheteur'
+        && request.resource.data.status == 'nouvelle';
+      allow read: if admin() || (signedIn() && (resource.data.buyerId == request.auth.uid || request.auth.uid in resource.data.sellerIds));
+      allow update: if admin() || (signedIn() && request.auth.uid in resource.data.sellerIds
+        && request.resource.data.buyerId == resource.data.buyerId
+        && request.resource.data.sellerIds == resource.data.sellerIds);
+      allow delete: if admin();
+    }
+  }
+}
