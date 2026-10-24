@@ -17,3 +17,26 @@ export function AuthProvider({ children }) {
   }, []);
   return J(C.Provider, { value:{user,profile,loading,refresh}, children });
 }
+
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB1RS3Y9lK09TGgIRbvEYyY6rtAv52gCxQ",
+  authDomain: "tech-market-togo.firebaseapp.com",
+  projectId: "tech-market-togo",
+  storageBucket: "tech-market-togo.firebasestorage.app",
+  messagingSenderId: "592766003868",
+  appId: "1:592766003868:web:53fba794dd88e2bf235b59",
+  measurementId: "G-DQW9ZC7YJ9"
+};
+
+const app = initializeApp(firebaseConfig);
+
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);
+
+export default app;
