@@ -1,7 +1,7 @@
 // TECH MARKET TOGO — configuration indépendante de DigiCom.
 // Remplace les valeurs par celles de TON projet Firebase TECH MARKET.
 export const firebaseConfig = {
-  apiKey: 'REMPLACER_PAR_API_KEY',
+  apiKey: 'AIzaSyB1RS3Y9lK09TGgIRbvEYyY6rtAv52gCxQ',
   authDomain: 'REMPLACER_PAR_PROJET.firebaseapp.com',
   projectId: 'REMPLACER_PAR_PROJECT_ID',
   appId: 'REMPLACER_PAR_APP_ID'
