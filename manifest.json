@@ -1,7 +1,7 @@
 {
   "name": "TECH MARKET TOGO",
   "short_name": "TECH MARKET",
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#f4f7f6",
   "theme_color": "#075e54",
